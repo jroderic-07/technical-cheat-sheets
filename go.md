@@ -7,6 +7,10 @@
 4. [Method Receivers](#method-receivers)
 5. [Interfaces](#interfaces)
 6. [Object Oriented](#object-oriented)
+7. [Concurrency](#concurrency)
+8. [Mutexes](#mutexes)
+9. [High Order Functions](#high-order-functions)
+10. [Generics](#generics)
 
 # Tools
 ## Go
@@ -252,5 +256,76 @@
 # High Order Functions
 
 # Generics
+- Generics provide a way to write code that is not specific to any particular type, which can make you code more flexible and reusable.
+- Generics are implemented in Go using type parameters - these are placeholders that can be replaced with any type when the code is used.
+
+```
+        package main
+
+        import (
+                "fmt"
+        )
+
+        type Num interface {
+                int | int8 | int16 | int32 | float64
+        }
+
+        func Max[T Num](a, b T) T {
+                if a > b {
+                        return a
+                }
+                return b
+        }
+
+        func main() {
+                maxInt := Max(10.5, 2.5)
+                fmt.Println(maxInt)
+
+                maxFloat := Max(12, 16)
+                fmt.Println(maxFloat)
+        }
+```
+
+- Rather than defining your own type parameters, this library has them: https://pkg.go.dev/golang.org/x/exp/constraints
+
+```
+        package main
+
+        import (
+                "fmt"
+                "golang.org/x/exp/constraints"
+        )
+
+        func Add[T constraints.Ordered](a T, b T) T {
+                return a + b
+        }
+
+
+        func main() {
+                result := Add(5.5,6.7)
+                fmt.Println(result)
+        }
+```
+
+- Tilde is used to denote the set of types whose underlying type is T
+
+```
+        package main
+
+        import (
+                "fmt"
+        )
+
+        type myString string
+
+        func Print[T ~string](s T)  {
+                fmt.Println(s)
+        }
+
+        func main() {
+                Print("Hello World")
+                Print(myString("Hello World Test"))
+        }
+```
 
 # Unsafe
