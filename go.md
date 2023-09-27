@@ -253,8 +253,6 @@
 
 # Mutexes
 
-# High Order Functions
-
 # Generics
 - Generics provide a way to write code that is not specific to any particular type, which can make you code more flexible and reusable.
 - Generics are implemented in Go using type parameters - these are placeholders that can be replaced with any type when the code is used.
@@ -325,6 +323,47 @@
         func main() {
                 Print("Hello World")
                 Print(myString("Hello World Test"))
+        }
+```
+
+# High Order Functions
+
+- Higher-order function - a function that either takes in another function as an argument or returns one.
+- Common types of higher order functions include map, reduce and filter.
+
+```
+        package main
+
+        // input: [1, 2, 3], (n) => n * 2
+        // output: [2, 4, 6]
+
+        import (
+                "fmt"
+                "golang.org/x/exp/constraints"
+        )
+
+        func MapValues[T constraints.Ordered](values []T, mapFunc func(T) T) []T {
+                var newValues []T
+                for _, v := range values {
+                        newValue := mapFunc(v)
+                        newValues = append(newValues, newValue)
+                }
+
+                return newValues
+        }
+
+        func main() {
+                vals := MapValues([]int{1,2,3}, func(n int) int {
+                        return n * 2
+                })
+
+                fmt.Println(vals)
+
+                vals2 := MapValues([]float64{1.2,2.4,3.6}, func(n float64) float64 {
+                        return n * 2
+                })
+
+                fmt.Println(vals2)
         }
 ```
 
