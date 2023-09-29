@@ -9,8 +9,8 @@
 6. [Object Oriented](#object-oriented)
 7. [Concurrency](#concurrency)
 8. [Mutexes](#mutexes)
-9. [High Order Functions](#high-order-functions)
-10. [Generics](#generics)
+9. [Generics](#generics)
+10. [High Order Functions](#high-order-functions)
 
 # Tools
 ## Go
