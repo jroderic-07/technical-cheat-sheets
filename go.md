@@ -252,6 +252,53 @@
 # Concurrency
 
 # Mutexes
+- A synchronization primative is a language-level object that providesa way to coordinate access to shared resources by go routines.
+- A mutex is a synchronization primitive that allows for only one goroutine to access a shared resource at a time.
+- This is useful for preventing race conditions (occur when two or more goroutines try to access and modify the same shared data at the same time).
+- A wait group allows one goroutine to wait for a collection of other goroutines to finish.
+
+```
+        package main
+
+        import (
+                "fmt"
+                "sync"
+        )
+
+        var (
+                mutex sync.Mutex
+                balance int
+        )
+
+        func deposit(value int, wg *sync.WaitGroup) {
+                mutex.Lock()
+                fmt.Printf("Depositing %d to account with balance %d\n", value, balance)
+                balance += value
+                mutex.Unlock()
+                wg.Done()
+        }
+
+        func withdraw(value int, wg *sync.WaitGroup) {
+                mutex.Lock()
+                fmt.Printf("withdrawing %d from account with balance %d\n", value, balance)
+                balance -= value
+                mutex.Unlock()
+                wg.Done()
+        }
+
+        func main() {
+                balance = 1000
+
+                var wg sync.WaitGroup
+                wg.Add(2)
+                go withdraw(700, &wg)
+                go deposit(500, &wg)
+                wg.Wait()
+
+                fmt.Printf("New balance %d\n", balance)
+
+        }
+```
 
 # Generics
 - Generics provide a way to write code that is not specific to any particular type, which can make you code more flexible and reusable.
@@ -364,6 +411,31 @@
                 })
 
                 fmt.Println(vals2)
+        }
+```
+- An anonymous function is a function that is defined without a name. It is also known as a function literal. They can be used anywhere that a named function can be used, they can also be passed and returned by functions, and assigned to variables.
+- A closure is a form of anonymous function that refers to variables specified outside of the function itself. It is the equivilant to accessing global variables that existed before the function's declaration.
+
+```
+        package main
+
+        import (
+                "fmt"
+        )
+
+        func message() func() string {
+                text := "joe"
+
+                return func() string {
+                        text = "Hi, " + text
+                        return text
+                }
+        }
+
+        func main() {
+                msg := message()
+
+                fmt.Println(msg())
         }
 ```
 
